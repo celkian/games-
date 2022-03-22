@@ -14,7 +14,6 @@ class Game:
         self.board = [0 for i in range(9)]
         self.winner = None 
         self.log = log
-        self.num_moves = 0
 
     def print(self): 
          print(f'{self.board[0]} {self.board[1]} {self.board[2]}\n{self.board[3]} {self.board[4]} {self.board[5]}\n{self.board[6]} {self.board[7]} {self.board[8]}')

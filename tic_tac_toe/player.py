@@ -4,10 +4,10 @@ from tic_tac_toe import Game
 class Player: 
      
      def __init__(self, strategy): 
-          self.strategy = strategy
+          strategy = strategy
 
      def choose_move(self, board): 
-          return self.strategy(board)
+          return strategy(board)
      
 def is_board_empty(board): 
      return board.count(board[0]) == len(board)
@@ -31,27 +31,27 @@ def strategy_function(board):
      move = 0
 
     #4
-     if self.board[0] != 0 and self.board[1] != self.board[2] != 0: 
+     if board[0] != 0 and board[1] != board[2] != 0: 
           move = random.choice(possible)
-     elif self.board[3] != 0 and self.board[4] !=0 and self.board[5] != 0: 
-          move = random.choice(possible)
-
-     elif self.board[6] != 0 and self.board[7] != 0 and self.board[8] != 0: 
+     elif board[3] != 0 and board[4] !=0 and board[5] != 0: 
           move = random.choice(possible)
 
-     elif self.board[0] != 0 and self.board[3] != 0 and self.board[6] != 0: 
+     elif board[6] != 0 and board[7] != 0 and board[8] != 0: 
           move = random.choice(possible)
 
-     elif self.board[1] != 0 and self.board[4] != 0 and self.board[7] != 0: 
+     elif board[0] != 0 and board[3] != 0 and board[6] != 0: 
           move = random.choice(possible)
 
-     elif self.board[2] != 0 and self.board[5] != 0 and self.board[8] != 0: 
+     elif board[1] != 0 and board[4] != 0 and board[7] != 0: 
           move = random.choice(possible)
 
-     elif self.board[0] != 0 and self.board[4] != 0 and self.board[8] != 0: 
+     elif board[2] != 0 and board[5] != 0 and board[8] != 0: 
           move = random.choice(possible)
 
-     elif self.board[2] != 0 and self.board[4] != 0 and self.board[6] != 0: 
+     elif board[0] != 0 and board[4] != 0 and board[8] != 0: 
+          move = random.choice(possible)
+
+     elif board[2] != 0 and board[4] != 0 and board[6] != 0: 
           move = random.choice(possible)
 
      elif board[3] == board[5] != 0 and board[4] == 0:

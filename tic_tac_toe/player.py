@@ -12,6 +12,13 @@ class Player:
 def is_board_empty(board): 
      return board.count(board[0]) == len(board)
 
+def is_move_possible(board): 
+     possible = []
+     for i in range(len(board)): 
+          if board[i] != 0: 
+               possible.append(i)
+     return possible
+
 
 def random_strategy_function(board):
      move = random.randint(0,8)
@@ -19,12 +26,35 @@ def random_strategy_function(board):
 
 
 def strategy_function(board):
-
+     possible = is_move_possible(board)
      empty = is_board_empty(board)
      move = 0
 
     #4
-     if board[3] == board[5] != 0 and board[4] == 0:
+     if self.board[0] != 0 and self.board[1] != self.board[2] != 0: 
+          move = random.choice(possible)
+     elif self.board[3] != 0 and self.board[4] !=0 and self.board[5] != 0: 
+          move = random.choice(possible)
+
+     elif self.board[6] != 0 and self.board[7] != 0 and self.board[8] != 0: 
+          move = random.choice(possible)
+
+     elif self.board[0] != 0 and self.board[3] != 0 and self.board[6] != 0: 
+          move = random.choice(possible)
+
+     elif self.board[1] != 0 and self.board[4] != 0 and self.board[7] != 0: 
+          move = random.choice(possible)
+
+     elif self.board[2] != 0 and self.board[5] != 0 and self.board[8] != 0: 
+          move = random.choice(possible)
+
+     elif self.board[0] != 0 and self.board[4] != 0 and self.board[8] != 0: 
+          move = random.choice(possible)
+
+     elif self.board[2] != 0 and self.board[4] != 0 and self.board[6] != 0: 
+          move = random.choice(possible)
+
+     elif board[3] == board[5] != 0 and board[4] == 0:
           move = 4
      elif board[1] == board[7] != 0 and board[4] == 0:
           move = 4

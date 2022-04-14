@@ -1,17 +1,12 @@
 import random
 
-class Player: 
-    
-    def choose_move(self, board):
-        move = random.randint(0, 8)
-        return move
-
 class Game: 
     def __init__(self, player_1, player_2, log): 
         self.player_1 = player_1
         self.player_2 = player_2
         self.players = {1: self.player_1, 2: self.player_2}
         self.board = [0 for i in range(9)]
+        self.board_copy = self.board.copy()
         self.winner = None 
         self.log = log
 
@@ -46,7 +41,7 @@ class Game:
             return self.board[2]
         #cats_cradle
         elif 0 not in self.board: 
-            return "cats cradle"
+            return 'cats cradle'
     
     def run(self):
 
@@ -81,8 +76,4 @@ class Game:
     
         return self.winner
 
-P1 = Player()
-P2 = Player()
-game = Game(P1, P2, log=True)
-game.run()
-print(game.winner)
+

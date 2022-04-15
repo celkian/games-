@@ -1,3 +1,4 @@
+
 from player import *
 from game import Game
 from ben_strat import strat1
@@ -9,9 +10,11 @@ from strat_player import *
 from cheater_strat import *
 
 my_strat = Player(strategy_function)
-random = Player(strategy_function)
+random = Player(random_strategy_function)
+
 outcomes = {'Tie': 0, 'my_strat': 0, 'random': 0}
-for i in range(100000):
+amount = 10000
+for i in range(amount):
     if i % 2 == 0:
         game = Game(my_strat,random,log=False)
         player_order = {'Tie': 'Tie', 1: 'my_strat', 2: 'random'}
@@ -23,4 +26,5 @@ for i in range(100000):
     outcomes[player_order[game.winner]] += 1
     if i % 1000 == 0:
         print(i)
-print((outcomes['my_strat'] / 100000) * 100 , '%')
+#print(outcomes)
+print((outcomes['my_strat'] / amount) * 100, '%')

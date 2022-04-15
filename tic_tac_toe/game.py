@@ -6,7 +6,6 @@ class Game:
         self.player_2 = player_2
         self.players = {1: self.player_1, 2: self.player_2}
         self.board = [0 for i in range(9)]
-        self.board_copy = self.board.copy()
         self.winner = None 
         self.log = log
 
@@ -49,9 +48,9 @@ class Game:
         self.current_player_num = 1
 
         while self.winner == None: 
-            
+            board_copy = self.board.copy()
             current_player = self.players[self.current_player_num]
-            upcoming_move = current_player.choose_move(self.board_copy)
+            upcoming_move = current_player.choose_move(board_copy)
         
 
             move_validity = self.move_validity(upcoming_move)

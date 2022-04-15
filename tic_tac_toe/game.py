@@ -41,17 +41,17 @@ class Game:
             return self.board[2]
         #cats_cradle
         elif 0 not in self.board: 
-            return 'cats cradle'
+            return 'Tie'
     
     def run(self):
 
-        first_player = random.randint(1, 2)
-        self.current_player_num = first_player
+        first_player = 1
+        self.current_player_num = 1
 
         while self.winner == None: 
             
             current_player = self.players[self.current_player_num]
-            upcoming_move = current_player.choose_move(self.board)
+            upcoming_move = current_player.choose_move(self.board_copy)
         
 
             move_validity = self.move_validity(upcoming_move)

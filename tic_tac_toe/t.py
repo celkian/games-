@@ -8,23 +8,21 @@ from player import *
 from random_player import *
 from strat_player import * 
 from cheater_strat import *
+from old_me_strat import *
+from christine_strat import *
 
-my_strat = Player(strategy_function)
-random = Player(random_strategy_function)
+player1 = Player(jeff)
+player2 = Player(christine_strat)
 
-outcomes = {'Tie': 0, 'my_strat': 0, 'random': 0}
-amount = 10000
+
+
+outcomes = {'Tie': 0, 'player1': 0, 'player2': 0}
+amount = 100
+
 for i in range(amount):
-    if i % 2 == 0:
-        game = Game(my_strat,random,log=False)
-        player_order = {'Tie': 'Tie', 1: 'my_strat', 2: 'random'}
-    else:
-        game = Game(random ,my_strat,log=False)
-        player_order = {'Tie': 'Tie', 1: 'random', 2: 'my_strat'}
+    game = Game(player1, player2,log=False)
+    player_order = {'Tie': 'Tie', 1: 'player1', 2: 'player2'}
 
     game.run()
     outcomes[player_order[game.winner]] += 1
-    if i % 1000 == 0:
-        print(i)
-#print(outcomes)
-print((outcomes['my_strat'] / amount) * 100, '%')
+print(outcomes)

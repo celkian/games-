@@ -44,13 +44,17 @@ class Game:
     
     def run(self):
 
-        first_player = 1
         self.current_player_num = 1
+        print(self.current_player_num)
 
         while self.winner == None: 
             board_copy = self.board.copy()
             current_player = self.players[self.current_player_num]
             upcoming_move = current_player.choose_move(board_copy)
+
+            if isinstance(upcoming_move, tuple):
+                upcoming_move = upcoming_move[0] * 3 + upcoming_move[1]
+
         
 
             move_validity = self.move_validity(upcoming_move)
@@ -69,9 +73,9 @@ class Game:
             
             self.winner = self.win_states_check()
             
-        if self.log == True: 
-            print("final game state")
-            self.print()
+        
+        print("final game state")
+        self.print()
     
         return self.winner
 

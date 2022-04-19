@@ -45,7 +45,6 @@ class Game:
     def run(self):
 
         self.current_player_num = 1
-        print(self.current_player_num)
 
         while self.winner == None: 
             board_copy = self.board.copy()
@@ -74,8 +73,8 @@ class Game:
             self.winner = self.win_states_check()
             
         
-        print("final game state")
-        self.print()
+        #print("final game state")
+        #self.print()
     
         return self.winner
 

@@ -17,7 +17,7 @@ def num_spots_filled(board):
                count += 1
      return count
 
-def strategy_function(board):
+def my_strat(board):
      possible = is_move_possible(board)
      empty = is_board_empty(board)
      count = num_spots_filled(board)

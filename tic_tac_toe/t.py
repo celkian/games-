@@ -11,18 +11,24 @@ from cheater_strat import *
 from old_me_strat import *
 from christine_strat import *
 
-player1 = Player(jeff)
-player2 = Player(christine_strat)
+player1 = Player(my_strat)
+player2 = Player(random_strategy_function)
 
 
 
 outcomes = {'Tie': 0, 'player1': 0, 'player2': 0}
-amount = 100
-
+amount = 100000
 for i in range(amount):
-    game = Game(player1, player2,log=False)
-    player_order = {'Tie': 'Tie', 1: 'player1', 2: 'player2'}
-
+    if i % 2 == 0:
+        game = Game(player1, player2,log=False)
+        order = {'Tie': 'Tie', 1: 'player1', 2: 'player2'}
+    else:
+        game = Game(player2, player1,log=False)
+        order = {'Tie': 'Tie', 1: 'player2', 2: 'player1'}
     game.run()
-    outcomes[player_order[game.winner]] += 1
+    outcomes[order[game.winner]] += 1 
 print(outcomes)
+
+
+win_rate = (outcomes['player1'] / amount ) * 100
+print(win_rate)

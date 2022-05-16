@@ -2,7 +2,10 @@ class Game:
     def __init__(self, player1,player2):
         self.player1 = player1
         self.player2 = player2
+        self.players = {1: self.player_1, 2: self.player_2}
         self.board = [[0,0,0,0,0,0,0] for i in range(6)]
+        self.winner = None
+
 
     def print(self):
         for i in range(6):
@@ -50,22 +53,22 @@ class Game:
             return 'Tie'
         
         return False
-                
-    def move_validity(self,move):
-        column_list = [rows[move] for rows in self.board]
-        print(column_list)
-        if column_list.count(column_list[0]) == len(column_list) and 0 not in column_list: 
-            return False
+    
+    def colum_index_of_move(self,colum):
+         
 
-        return True 
+        
 
-    def run(self,log=False): 
+
+
+
+
 
 
 p1= 0
 p2= 0
 c4 = Game(p1,p2)
-print(c4.move_validity(2))
+print(c4.open_columns())
         
 
 

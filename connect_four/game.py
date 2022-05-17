@@ -1,11 +1,12 @@
-class Game: 
+from random_strat import RandomStrat
+
+class ConnectFour: 
     def __init__(self, player1,player2):
         self.player1 = player1
         self.player2 = player2
-        self.players = {1: self.player_1, 2: self.player_2}
+        self.players = {1: self.player1, 2: self.player2}
         self.board = [[0,0,0,0,0,0,0] for i in range(6)]
         self.winner = None
-
 
     def print(self):
         for i in range(6):
@@ -19,29 +20,28 @@ class Game:
     
     def check_win_states(self): 
         #horizontal
-        for i in range(6): 
-            for j in range(4):
-                if self.board[i][j] == self.board[i][j+1] == self.board[i][j+2] == self.board[i][j+3] != 0: 
-                    return self.board[i][j]
+        for i in range(4):
+            for j in range(6):
+                if self.board[j][i] == self.board[j][i+1] == self.board[j][i+2] == self.board[j][i+3] != 0:
+                    return self.board[j][i]
 
         #vertical
-        for i in range(4): 
-            for j in range(7):
-                if self.board[i][j] == self.board[i+1][j] == self.board[i+2][j] == self.board[i+3][j] != 0:
-                    return self.board[i][j]
+        for i in range(7):
+            for j in range(3):
+                if self.board[j][i] == self.board[j+1][i] == self.board[j+2][i] == self.board[j+3][i] != 0:
+                    return self.board[j][i]
 
-        
-        #positive diagonals
+        #positive diagonals 
         for i in range(4):
-            for j in range(3, 6):
-                if self.board[i][j] == self.board[i+1][j-1] == board[i+2][j-2] == board[i+3][j-3] != 0:
-                    return self.board[i][j]
+            for j in range(3):
+                if self.board[j][i] == self.board[j+1][i+1] == self.board[j+2][i+2] == self.board[j+3][i+3] != 0:
+                    return self.board[j][i]
 
         #negative diagonals
         for i in range(4):
-            for j in range(3):
-                if self.board[i][j] == self.board[i+1][j+1] == self.board[i+2][j+2] == self.board[i+3][j+3] != 0:
-                    return self.board[i][j]
+            for j in range(3, 6):
+                if self.board[j][i] == self.board[j-1][i+1] == self.board[j-2][i+2] == self.board[j-3][i+3] != 0:
+                    return self.board[j][i]
 
        #tie
         flat_list =[]
@@ -50,25 +50,57 @@ class Game:
                 flat_list.append(rows[i])
         
         if 0 not in flat_list: 
-            return 'Tie'
-        
-        return False
+            return 'Tie'   
     
-    def colum_index_of_move(self,colum):
+    def move_validity(self, move): 
+        for i in range(6): 
+            if self.board[i][move] == 0: 
+                return True 
+        return False
+
+    def row_index_of_move(self, move):
+        for i in range(6): 
+            row = 5-i
+            if self.board[row][move] == 0:
+                return row 
+    
+    def run(self, log=False): 
+        self.log = log
+        self.current_player_num = 1
+        while self.winner == None: 
+            copy_board = self.copy_board()
+            current_player = self.players[self.current_player_num]
+            upcoming_column_move = current_player.choose_move(copy_board)
+            move_row_index = self.row_index_of_move(upcoming_column_move)
+
+            if self.move_validity(upcoming_column_move) == True: 
+                self.board[move_row_index][upcoming_column_move] += self.current_player_num
+            
+            if self.log == True: 
+                print('move coordinates made is',(move_row_index, upcoming_column_move))
+                self.print()
+            
+            if self.current_player_num == 1: 
+                self.current_player_num = 2
+            elif self.current_player_num == 2: 
+                self.current_player_num = 1
+            
+            self.winner = self.check_win_states()
+        
+    
+        return self.winner
+
+                
+
+p1 = RandomStrat()
+p2 = RandomStrat()
+c4 = ConnectFour(p1, p2)
+c4.run(log=True)
+
          
 
-        
+    
 
-
-
-
-
-
-
-p1= 0
-p2= 0
-c4 = Game(p1,p2)
-print(c4.open_columns())
-        
+ 
 
 

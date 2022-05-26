@@ -1,6 +1,7 @@
 class CustomPlayer: 
     def __init__(self): 
         self.total_move_count = 0
+        
     
     def choose_move(self): 
 
@@ -105,6 +106,7 @@ class CustomPlayer:
         if self.total_move_count == 111: 
             self.total_move_count = 12
             return "a"
+    print()
 
 
 

@@ -1,5 +1,5 @@
 import random
-from input_player import InputPlayer
+from input_player import CustomPlayer
 
 class Snake: 
 
@@ -10,8 +10,6 @@ class Snake:
         self.berry_location = None 
         self.player = player
         self.game_over = False
-        self.generate_berry()
-        self.generate_snake()
 
     def print_board(self): 
         for i in range(10):
@@ -49,6 +47,8 @@ class Snake:
     
     
     def run(self): 
+        self.generate_berry()
+        self.generate_snake()
         self.print_board()
 
         while self.game_over == False:
@@ -85,6 +85,6 @@ class Snake:
 
 
 
-player = InputPlayer()
+player = CustomPlayer()
 snake = Snake(player)
 snake.run()

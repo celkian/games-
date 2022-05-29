@@ -57,7 +57,7 @@ class Snake:
             head = self.snake[-1]
             tail = self.snake[0]
         
-            move = self.player.choose_move()
+            move = self.player.choose_move(self.board,self.snake)
             self.num_player_moves += 1
             new_segment = None 
             if move == 'w':

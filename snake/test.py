@@ -1,15 +1,15 @@
 from game import Snake
 from custom_player import CustomPlayer
-
-p1 = CustomPlayer()
-snake = Snake(p1)
+from ben_player import BenPlayer
+from elias_player import EliasPlayer
+from christine_player import ChristinePlayer
 
 total_score = 0
 total_moves = 0
 
 num_games = 100
 for i in range(num_games): 
-    p1 = CustomPlayer()
+    p1 = ChristinePlayer()
     snake = Snake(p1)
     snake.run()
     total_score += snake.score

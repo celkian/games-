@@ -90,12 +90,6 @@ class ConnectFour:
     
         return self.winner
 
-p1 = RandomStrat()
-p2 = RandomStrat()
-c4 = ConnectFour(p1, p2)
-c4.run(log=True)
-print(c4.winner)
-
          
 
     

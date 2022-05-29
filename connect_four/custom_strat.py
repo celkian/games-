@@ -21,3 +21,12 @@ class CustomPlayer:
             self.player_num = 1 
         else: 
             self.player_num = 2
+    
+    def choose_move(self, board): 
+        self.all_open_columns(board)
+        if 4 in self.open_columns: 
+            return 4
+        elif 4 not in self.open_columns: 
+            return 5
+        elif 5 not in self.open_columns: 
+            return 6

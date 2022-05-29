@@ -3,7 +3,7 @@ class CustomPlayer:
         self.total_move_count = 0
         
     
-    def choose_move(self): 
+    def choose_move(self, board,snake): 
 
         if self.total_move_count < 6: 
             self.total_move_count += 1

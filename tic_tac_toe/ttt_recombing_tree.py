@@ -13,10 +13,12 @@ class Node:
         if self.game_state.count(1) == self.game_state.count(2):
             upcoming_player = 1
         return upcoming_player 
+    
+    def print(self): 
+         print(f'{self.game_state[0]} {self.game_state[1]} {self.game_state[2]}\n{self.game_state[3]} {self.game_state[4]} {self.game_state[5]}\n{self.game_state[6]} {self.game_state[7]} {self.game_state[8]}')
 
     def check_win_states(self):
     
-
         #rows
         if self.game_state[0] == self.game_state[1] == self.game_state[2] != 0: 
             return self.game_state[0]
@@ -106,4 +108,4 @@ class TicTacToeRecombiningTree:
 
 tree = TicTacToeRecombiningTree()
 tree.generate_tree()
-print(tree.num_nodes)
+#print(tree.num_nodes)

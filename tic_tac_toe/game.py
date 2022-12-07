@@ -54,7 +54,6 @@ class Game:
             if isinstance(upcoming_move, tuple):
                 upcoming_move = upcoming_move[0] * 3 + upcoming_move[1]
 
-        
 
             move_validity = self.move_validity(upcoming_move)
             if move_validity == True:

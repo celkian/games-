@@ -46,7 +46,7 @@ class Game:
 
         self.current_player_num = 1
 
-        while self.winner == None: 
+        while self.winner == None:
             board_copy = self.board.copy()
             current_player = self.players[self.current_player_num]
             upcoming_move = current_player.choose_move(board_copy)
@@ -72,8 +72,8 @@ class Game:
             self.winner = self.win_states_check()
             
         
-        #print("final game state")
-        #self.print()
+        print("final game state")
+        self.print()
     
         return self.winner
 

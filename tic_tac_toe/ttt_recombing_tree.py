@@ -5,8 +5,9 @@ class Node:
         self.game_state = game_state
         self.upcoming_player = self.upcoming_player()
         self.winner = self.check_win_states()
-        self.parents = None 
+        self.parents = []
         self.children = []
+        self.minimax_value = None
     
     def upcoming_player(self): 
         upcoming_player = 2
@@ -52,6 +53,26 @@ class Node:
                 avaliable_moves.append(i)
         return avaliable_moves
 
+    def assign_minimax_values(self): 
+        if self.children == []:
+            if self.winner == 1: 
+                self.minimax_value = 1
+            elif self.winner == 2: 
+                self.minimax_value = -1 
+            elif self.winner == 'Tie': 
+                self.minimax_value = 0
+        
+        else: 
+            children_minimax_values = []
+            for children in self.children:
+
+                value = self.assign_minimax_values(children)
+                children_minimax_values.append(value)
+
+            if self.upcoming_player == 1: 
+                    self.minimax_value = max(children_minimax_values)
+            else: 
+                self.minimax_value = min(children_minimax_values)
 class Queue:
     def __init__(self):
         self.items = [] 
@@ -68,13 +89,15 @@ class Queue:
 
 class TicTacToeRecombiningTree: 
     def __init__(self): 
-
-        self.nodes = {}
-
-    def generate_tree(self): 
+        self.generate_tree()
+        self.terminal_nodes = self.terminal_nodes()
     
+    def generate_tree(self): 
+        self.nodes = {}
         empty_board = Node([0 for i in range(9)])
+        self.root = empty_board
         self.nodes[tuple(empty_board.game_state)] = empty_board
+
         queue = Queue()
         queue.enqueue(empty_board)
     
@@ -89,23 +112,68 @@ class TicTacToeRecombiningTree:
                 for move in avaliable_moves: 
                     new_move_board = current_board.copy()
                     new_move_board[move] = current_node.upcoming_player
-                    new_node = Node(new_move_board)
+                    #new_node = Node(new_move_board)
                     
-                    if tuple(new_node.game_state) in self.nodes:
+                    if tuple(new_move_board) in self.nodes:
+                        new_node = self.nodes[tuple(new_move_board)]
                         current_node.children.append(new_node)
+                        new_node.parents.append(current_node)
                         continue
-                    queue.enqueue(new_node)
-                    new_node.parent = current_node
+                    
+                    new_node = Node(new_move_board)
+                    new_node.parents.append(current_node)
                     current_node.children.append(new_node)
+                    queue.enqueue(new_node)
                     self.nodes[tuple(new_node.game_state)] = new_node
                     
             queue.dequeue() 
-        
         self.num_nodes = len(self.nodes)
+    
+    def terminal_nodes(self):
+        terminal_nodes = [] 
+        for tuple in self.nodes: 
+            node = self.nodes[tuple]
+            if node.winner != None: 
+                terminal_nodes.append(node)
+        return terminal_nodes
+                
+
+    
+    
+
+    def assign_minimax_values(self, node):
         
+        if node.children == []: 
+            if node.winner == 1:
+                node.minimax_value = 1
+            elif node.winner == 2:
+                node.minimax_value = -1
+            elif node.winner == 'Tie':
+                node.minimax_value = 0
+        
+        else:
+            children_minimax_values = []
+            #print("a" + str(len(node.children)))
+
+            for child in node.children:
+                self.assign_minimax_values(child)
+                children_minimax_values.append(child.minimax_value)
+
+            if node.upcoming_player == 1:
+                node.minimax_value = max(children_minimax_values)
+            else:
+                node.minimax_value = min(children_minimax_values)
+        
+        return node.minimax_value
 
 
+
+        
+        
+            
+
+        
 
 tree = TicTacToeRecombiningTree()
-tree.generate_tree()
-#print(tree.num_nodes)
+print(tree.num_nodes)
+tree.assign_minimax_values(tree.root)

@@ -1,0 +1,2 @@
+class MiniMaxPlayer: 
+    def choo

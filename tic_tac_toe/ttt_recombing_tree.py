@@ -90,7 +90,7 @@ class Queue:
 class TicTacToeRecombiningTree: 
     def __init__(self): 
         self.generate_tree()
-        self.terminal_nodes = self.terminal_nodes()
+        self.assign_minimax_values(self.root)
     
     def generate_tree(self): 
         self.nodes = {}
@@ -129,18 +129,6 @@ class TicTacToeRecombiningTree:
             queue.dequeue() 
         self.num_nodes = len(self.nodes)
     
-    def terminal_nodes(self):
-        terminal_nodes = [] 
-        for tuple in self.nodes: 
-            node = self.nodes[tuple]
-            if node.winner != None: 
-                terminal_nodes.append(node)
-        return terminal_nodes
-                
-
-    
-    
-
     def assign_minimax_values(self, node):
         
         if node.children == []: 
@@ -175,5 +163,4 @@ class TicTacToeRecombiningTree:
         
 
 tree = TicTacToeRecombiningTree()
-print(tree.num_nodes)
-tree.assign_minimax_values(tree.root)
+

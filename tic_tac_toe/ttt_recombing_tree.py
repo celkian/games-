@@ -53,26 +53,7 @@ class Node:
                 avaliable_moves.append(i)
         return avaliable_moves
 
-    def assign_minimax_values(self): 
-        if self.children == []:
-            if self.winner == 1: 
-                self.minimax_value = 1
-            elif self.winner == 2: 
-                self.minimax_value = -1 
-            elif self.winner == 'Tie': 
-                self.minimax_value = 0
-        
-        else: 
-            children_minimax_values = []
-            for children in self.children:
 
-                value = self.assign_minimax_values(children)
-                children_minimax_values.append(value)
-
-            if self.upcoming_player == 1: 
-                    self.minimax_value = max(children_minimax_values)
-            else: 
-                self.minimax_value = min(children_minimax_values)
 class Queue:
     def __init__(self):
         self.items = [] 

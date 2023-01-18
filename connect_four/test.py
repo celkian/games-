@@ -8,6 +8,8 @@ custom = CustomPlayer()
 
 
 
+
+
 outcomes = {'Tie': 0, 'random': 0, 'custom': 0}
 amount = 10000
 for i in range(amount):

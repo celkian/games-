@@ -27,6 +27,3 @@ class MiniMaxPlayer:
                 best_move_index = i 
                 return best_move_index
 
-
-game = Game(MiniMaxPlayer(),ManualPlayer(), True)
-game.run()

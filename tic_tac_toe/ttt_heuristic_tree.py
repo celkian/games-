@@ -177,14 +177,3 @@ class TicTacToeHeuristicTree:
     
     
         
-    
-tree = TicTacToeHeuristicTree([0,0,0,0,0,0,0,0,0],6)
-print(tree.num_nodes)
-
-values = []
-for nodes in tree.nodes: 
-    values.append(tree.nodes[nodes].heuristic_value)
-
-value_two = list(set(values))
-
-print(value_two)

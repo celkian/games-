@@ -136,17 +136,3 @@ class TicTacToeRecombiningTree:
         
         return node.minimax_value
     
-    
-    
-    
-
-
-
-        
-        
-            
-
-        
-
-tree = TicTacToeRecombiningTree()
-

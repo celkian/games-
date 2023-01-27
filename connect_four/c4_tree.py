@@ -1,3 +1,5 @@
+import copy
+
 class C4Node:
 
     def __init__(self, game_state):
@@ -56,12 +58,18 @@ class C4Node:
     def remaining_columns(self):
         open_columns = [i for i in range(7)]
         for i in range(7):
-            nonzero_column_values = [self.game_state[j][i]
-                                     for j in range(6) if self.game_state[j][i] != 0]
+            nonzero_column_values = [self.game_state[j][i] for j in range(6) if self.game_state[j][i] != 0]
             if len(nonzero_column_values) == 6:
                 open_columns.remove(i)
 
         return open_columns
+    
+    def copy_of_copies(self): 
+        new_copy = []
+        for rows in self.game_state: 
+            new_copy.append(rows.copy())
+        
+        return new_copy
 
 
 class Queue:
@@ -103,13 +111,13 @@ class C4HeuristicTree:
 
                 for column in avaliable_columns: 
 
-                    new_move_board = current_board.copy()
+                    new_move_board = current_node.copy_of_copies()
                     new_move_row_index = self.row_index_of_move(column, new_move_board)
                     new_move_board[new_move_row_index][column] = current_node.upcoming_player
-                    tuple_board =tuple([tuple(new_move_board[i]) for i in range(6)])
+                    new_move_tuple_board = tuple([tuple(new_move_board[i]) for i in range(6)])
                     
-                    if tuple_board in self.nodes:
-                        new_node = self.nodes[tuple_board]
+                    if new_move_tuple_board in self.nodes:
+                        new_node = self.nodes[new_move_tuple_board]
                         current_node.children.append(new_node)
                         new_node.parents.append(current_node)
                         new_node.depth = current_node.depth + 1
@@ -120,7 +128,7 @@ class C4HeuristicTree:
                     new_node.parents.append(current_node)
                     current_node.children.append(new_node)
                     queue.enqueue(new_node)
-                    self.nodes[tuple_board] = new_node
+                    self.nodes[new_move_tuple_board] = new_node
                     
             queue.dequeue() 
         self.num_nodes = len(self.nodes)
@@ -132,5 +140,18 @@ class C4HeuristicTree:
                 return row
 
 
-tree = C4HeuristicTree([[0,0,0,0,0,0,0] for i in range(6)], 1)
-print(tree.nodes)
+test = [[0,0,0,0,0,0,0], 
+        [0,0,0,0,0,0,0], 
+        [0,0,0,0,0,0,0], 
+        [0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0]]
+
+tree = C4HeuristicTree(test,3)
+
+for nodes in tree.nodes: 
+        tree.nodes[nodes].print()
+        print()
+
+print('num nodes', tree.num_nodes)
+

@@ -9,6 +9,7 @@ class C4Node:
         self.parents = []
         self.children = []
         self.depth = 0
+        self.heuristic_value = None
 
     def upcoming_player(self):
         upcoming_player = 2
@@ -70,6 +71,10 @@ class C4Node:
             new_copy.append(rows.copy())
         
         return new_copy
+    
+    def calc_heuristic_value(self): 
+        #calculate value
+        return
 
 
 class Queue:
@@ -87,22 +92,26 @@ class Queue:
 
 
 class C4HeuristicTree:
-    def __init__(self, game_state, ply):
-        self.root = C4Node(game_state)
-        self.ply = ply
-        self.generate_tree()
+    def __init__(self, game_state, initial_ply):
 
-    def generate_tree(self): 
+        self.root = C4Node([[0,0,0,0,0,0,0] for i in range(6)])
         self.nodes = {}
         self.nodes[tuple([tuple(self.root.game_state[i]) for i in range(6)])] = self.root
 
+        self.initial_ply = initial_ply
+
+        self.generate_initial_tree()
+
+    def generate(self, nodes, ply): 
+
         queue = Queue()
-        queue.enqueue(self.root)
+        for node in nodes: 
+            queue.enqueue(node)
 
         while len(queue.items) != 0:
 
             current_node = queue.items[0]
-            if current_node.depth >= self.ply: 
+            if current_node.depth >= ply: 
                 break
 
             if current_node.winner == None: 
@@ -133,11 +142,44 @@ class C4HeuristicTree:
             queue.dequeue() 
         self.num_nodes = len(self.nodes)
     
+    def generate_initial_tree(self): 
+        self.generate([self.root], self.initial_ply)
+    
     def row_index_of_move(self, move, board):
         for i in range(6):
             row = 5-i
             if board[row][move] == 0:
                 return row
+    
+    def one_layer_tuple(self, depth): 
+        tuple_layer = []
+        for nodes in self.nodes: 
+            node = self.nodes[nodes]
+            if node.depth == depth: 
+                tuple_layer.append(nodes)
+        return tuple_layer
+    
+    def prune_layer(self, depth):
+        layer_to_prune = self.one_layer_tuple(depth)
+        for nodes in layer_to_prune: 
+            self.nodes.pop(nodes)
+        
+        self.num_nodes = len(self.nodes)
+
+    
+    
+    def add_layer(self, new_layer_depth): 
+        previous_layer_tuples = self.one_layer_tuple(new_layer_depth - 1)
+        
+        previous_layer_nodes = [self.nodes[node_tuples] for node_tuples in previous_layer_tuples]
+
+        self.generate(previous_layer_nodes, new_layer_depth)
+    
+        
+    
+    def assign_heuristic_values(self, node): 
+        #assign heuristic values 
+        return 
 
 
 test = [[0,0,0,0,0,0,0], 
@@ -148,10 +190,15 @@ test = [[0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0]]
 
 tree = C4HeuristicTree(test,3)
+#tree.add_layer(2)
+#tree.prune_layer(1)
+#tree.add_layer(3)
+#tree.prune_layer(2)
 
+#tree.add_layer(2)
 for nodes in tree.nodes: 
-        tree.nodes[nodes].print()
-        print()
+    tree.nodes[nodes].print()
+    print()
 
-print('num nodes', tree.num_nodes)
+print('num nodes', tree.num_nodes-1)
 

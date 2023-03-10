@@ -1,9 +1,13 @@
 import copy
+import time
+import random
 
 class C4Node:
 
     def __init__(self, game_state):
         self.game_state = game_state
+        self.rows = [game_state[i] for i in range(len(game_state))]
+        self.columns = [[rows[i] for rows in game_state] for i in range(6)]
         self.upcoming_player = self.upcoming_player()
         self.winner = self.check_win_states()
         self.parents = []
@@ -72,9 +76,13 @@ class C4Node:
         
         return new_copy
     
+    def determine(self, list): 
+        list_length = len(list)
+        6
     def calc_heuristic_value(self): 
-        #calculate value
-        return
+        value = 0 
+        return 
+    
 
 
 class Queue:
@@ -92,7 +100,7 @@ class Queue:
 
 
 class C4HeuristicTree:
-    def __init__(self, game_state, initial_ply):
+    def __init__(self, initial_ply):
 
         self.root = C4Node([[0,0,0,0,0,0,0] for i in range(6)])
         self.nodes = {}
@@ -178,27 +186,63 @@ class C4HeuristicTree:
         
     
     def assign_heuristic_values(self, node): 
-        #assign heuristic values 
+        if node.children == []: 
+            if node.winner == 1:
+                node.heuristic_value = 1
+            elif node.winner == 2:
+                node.heuristic_value = -1
+            elif node.winner == 'Tie':
+                node.heuristic_value = 0
+            else: 
+                node.heuristic_value = node.calc_heuristic_value()
+                
+        
+        else:
+            children_heuristic_values = []
+
+            for child in node.children:
+                self.assign_heuristic_values(child)
+                children_heuristic_values.append(child.heuristic_value)
+
+
+            if node.upcoming_player == 1:
+                node.heuristic_value = max(children_heuristic_values)
+            else:
+                node.heuristic_value = min(children_heuristic_values)
+        
+        return node.heuristic_value
+        
         return 
 
 
-test = [[0,0,0,0,0,0,0], 
-        [0,0,0,0,0,0,0], 
-        [0,0,0,0,0,0,0], 
-        [0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0]]
+node = C4Node([[1,0,0,0,0,0,0],
+               [1,0,0,0,0,0,0], 
+               [1,0,0,0,0,0,0], 
+               [1,0,0,0,0,0,0], 
+               [1,0,0,0,0,0,0], 
+               [1,0,0,0,0,0,0]])
 
-tree = C4HeuristicTree(test,3)
-#tree.add_layer(2)
-#tree.prune_layer(1)
-#tree.add_layer(3)
-#tree.prune_layer(2)
+#print(node.columns)
 
-#tree.add_layer(2)
+
+#start = time.time()
+
+tree = C4HeuristicTree(2)
+
+tree.assign_heuristic_values(tree.root)
+#tree.add_layer(6)
+#tree.prune_layer(5)
+#tree.add_layer(7)
+#tree.prune_layer(6)
+
 for nodes in tree.nodes: 
     tree.nodes[nodes].print()
+    print((tree.nodes[nodes].heuristic_value))
     print()
 
-print('num nodes', tree.num_nodes-1)
+#end = time.time()
+#print('total time', end-start)
+#print('num nodes', tree.num_nodes-1)
+
+
 

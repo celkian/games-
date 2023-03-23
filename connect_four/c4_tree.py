@@ -2,12 +2,17 @@ import copy
 import time
 import random
 
+# update check win states bc storing the rows and columns now
+#COMBINE THE LOOPS FOR HORIZONTAL AND VERTICAL
 class C4Node:
 
     def __init__(self, game_state):
         self.game_state = game_state
         self.rows = [game_state[i] for i in range(len(game_state))]
-        self.columns = [[rows[i] for rows in game_state] for i in range(6)]
+        self.columns = [[rows[i] for rows in game_state] for i in range(7)]
+
+        self.diagonals = None #DEFINE DIAGOANLS
+
         self.upcoming_player = self.upcoming_player()
         self.winner = self.check_win_states()
         self.parents = []
@@ -76,14 +81,96 @@ class C4Node:
         
         return new_copy
     
-    def determine(self, list): 
-        list_length = len(list)
-        6
-    def calc_heuristic_value(self): 
-        value = 0 
-        return 
-    
+    def classify_horizontals(self): 
+        self.horizontal_three_of_a_kinds = []
+        self.horizontal_two_of_a_kinds = []
 
+        for horizontal in self.rows: 
+            for i in range(4): 
+                #2220
+                if horizontal[0 + i] == horizontal[1 + i] == horizontal[2+i] != 0 and horizontal[3+i] == 0: 
+                    if horizontal[0 + i] == self.upcoming_player: 
+                        self.horizontal_three_of_a_kinds.append(3)
+                    else: 
+                        self.horizontal_three_of_a_kinds.append(-3)
+
+                #0222
+                elif horizontal[0 + i] == 0 and horizontal[1 + i] == horizontal[2 + i] == horizontal[3 + i] != 0: 
+                    if horizontal[1 + i] == self.upcoming_player: 
+                        self.horizontal_three_of_a_kinds.append(3)
+                    else: 
+                        self.horizontal_three_of_a_kinds.append(-3)
+
+                #0022
+                elif horizontal[0 + i] == horizontal[1 + i] == 0 and horizontal[2+i] == horizontal[3 + i] != 0: 
+                    if horizontal[2 + i] == self.upcoming_player: 
+                        self.horizontal_three_of_a_kinds.append(2)
+                    else: 
+                        self.horizontal_three_of_a_kinds.append(-2)
+                #2200
+                elif horizontal[0 + i] == horizontal[1 + i] != 0 and horizontal[2+i] == horizontal[3 + i] == 0: 
+                    if horizontal[0 + i] == self.upcoming_player: 
+                        self.horizontal_three_of_a_kinds.append(2)
+                    else: 
+                        self.horizontal_three_of_a_kinds.append(-2)
+
+                #0220
+                elif horizontal[0 + i] == horizontal[3 + i] == 0 and horizontal[1+i] == horizontal[2 + i] != 0: 
+                    if horizontal[2 + i] == self.upcoming_player: 
+                        self.horizontal_three_of_a_kinds.append(2)
+                    else: 
+                        self.horizontal_three_of_a_kinds.append(-2)
+                #2002
+                elif horizontal[0 + i] == horizontal[3 + i] != 0 and horizontal[1+i] == horizontal[2 + i] == 0: 
+                    if horizontal[0 + i] == self.upcoming_player: 
+                        self.horizontal_three_of_a_kinds.append(2)
+                    else: 
+                        self.horizontal_three_of_a_kinds.append(-2)
+                #0202
+                elif horizontal[0 + i] == horizontal[2 + i] == 0 and horizontal[1+i] == horizontal[3 + i] != 0: 
+                    if horizontal[0 + i] == self.upcoming_player: 
+                        self.horizontal_three_of_a_kinds.append(2)
+                    else: 
+                        self.horizontal_three_of_a_kinds.append(-2)
+                #2020
+                elif horizontal[0 + i] == horizontal[2 + i] != 0 and horizontal[1+i] == horizontal[3 + i] == 0: 
+                    if horizontal[0 + i] == self.upcoming_player: 
+                        self.horizontal_three_of_a_kinds.append(2)
+                    else: 
+                        self.horizontal_three_of_a_kinds.append(-2)
+
+        return sum(self.horizontal_three_of_a_kinds) + sum(self.horizontal_two_of_a_kinds)
+
+    def classify_verticals(self):
+
+        self.vertical_three_of_a_kinds = []
+        self.vertical_two_of_a_kinds = []
+
+        for vertical in self.columns: 
+            for i in range(3): 
+                #0222
+                if vertical[0 + i] == 0 and vertical[1 + i] == vertical[2 + i] == vertical[3 + i] != 0: 
+                    if vertical[2 + i] == self.upcoming_player: 
+                        self.vertical_three_of_a_kinds.append(3)
+                    else: 
+                        self.vertical_three_of_a_kinds.append(-3)
+                #0022
+                elif vertical[0 + i] == vertical[1 + i] == 0 and  vertical[2 + i] == vertical[3 + i] != 0: 
+                    
+                    if vertical[2 + i] == self.upcoming_player: 
+                        self.vertical_three_of_a_kinds.append(2)
+                    else: 
+                        self.vertical_three_of_a_kinds.append(-2)
+    
+        return sum(self.vertical_three_of_a_kinds) + sum(self.vertical_two_of_a_kinds)
+    
+        self.diagonals_two_of_a_kinds = {}
+        self.diagonals_three_of_a_kinds = {}
+    
+    def calc_heuristic_value(self): 
+        horizontal_total = self.classify_horizontals()
+        vertical_total = self.classify_verticals()
+        return ((horizontal_total + vertical_total ) / 40)
 
 class Queue:
     def __init__(self):
@@ -97,7 +184,6 @@ class Queue:
 
     def dequeue(self):
         self.items.pop(0)
-
 
 class C4HeuristicTree:
     def __init__(self, initial_ply):
@@ -174,16 +260,12 @@ class C4HeuristicTree:
         
         self.num_nodes = len(self.nodes)
 
-    
-    
     def add_layer(self, new_layer_depth): 
         previous_layer_tuples = self.one_layer_tuple(new_layer_depth - 1)
         
         previous_layer_nodes = [self.nodes[node_tuples] for node_tuples in previous_layer_tuples]
 
         self.generate(previous_layer_nodes, new_layer_depth)
-    
-        
     
     def assign_heuristic_values(self, node): 
         if node.children == []: 
@@ -215,30 +297,23 @@ class C4HeuristicTree:
         return 
 
 
-node = C4Node([[1,0,0,0,0,0,0],
-               [1,0,0,0,0,0,0], 
-               [1,0,0,0,0,0,0], 
-               [1,0,0,0,0,0,0], 
-               [1,0,0,0,0,0,0], 
-               [1,0,0,0,0,0,0]])
-
-#print(node.columns)
-
+#node = C4Node([[0,0,0,0,0,0,0],
+#        [0,0,0,0,0,0,0],
+#        [0,0,0,0,0,0,0],
+#        [0,0,0,0,0,0,2],
+#        [0,0,0,0,0,0,2],
+#        [0,0,0,0,0,1,1]])
 
 #start = time.time()
 
-tree = C4HeuristicTree(2)
+#tree = C4HeuristicTree(4)
 
-tree.assign_heuristic_values(tree.root)
-#tree.add_layer(6)
-#tree.prune_layer(5)
-#tree.add_layer(7)
-#tree.prune_layer(6)
+#tree.assign_heuristic_values(tree.root)
 
-for nodes in tree.nodes: 
-    tree.nodes[nodes].print()
-    print((tree.nodes[nodes].heuristic_value))
-    print()
+#for nodes in tree.nodes: 
+#    tree.nodes[nodes].print()
+#    print((tree.nodes[nodes].heuristic_value))
+#    print()
 
 #end = time.time()
 #print('total time', end-start)

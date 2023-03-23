@@ -6,6 +6,9 @@ from manual_player import ManualPlayer
 from ttt_heuristic_tree import *
 from ttt_recombing_tree import *
 
+game = Game(ManualPlayer(), MiniMaxPlayer(), log=True)
+game.run()
+
 random_nine =  {'Tie': 0, 'heuristic_9': 0, 'random': 0}
 random_two =  {'Tie': 0, 'heuristic_2': 0, 'random': 0}
 two_nine =  {'Tie': 0, 'heuristic_9': 0, 'heuristic_2': 0}

@@ -1,6 +1,6 @@
 import random
 
-class RandomStrat: 
+class RandomPlayer: 
     def open_columns(self, board_copy):
         open_columns = []
         for i in range(7):

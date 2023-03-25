@@ -1,4 +1,3 @@
-from random_strat import RandomStrat
 
 class ConnectFour: 
     def __init__(self, player1,player2):
@@ -86,8 +85,11 @@ class ConnectFour:
                 self.current_player_num = 1
             
             self.winner = self.check_win_states()
-        
-    
+
+            if self.winner != None:
+                print("final game state")
+                self.print()
+                print('winner was player', self.winner)
         return self.winner
 
          

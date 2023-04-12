@@ -1,3 +1,4 @@
+
 class HeuristicNode:
 
     def __init__(self, game_state): 
@@ -175,7 +176,7 @@ class TicTacToeHeuristicTree:
         return node.heuristic_value
 
 
-tree = TicTacToeHeuristicTree([0,0,0,0,0,0,0,0,0], 1)
+tree = TicTacToeHeuristicTree([0,0,0,0,0,0,0,0], 1)
 
 for nodes in tree.nodes: 
     print(tree.nodes[nodes].game_state)

@@ -1,17 +1,11 @@
 import copy
-import time
-import random
 
-# update check win states bc storing the rows and columns now
-#COMBINE THE LOOPS FOR HORIZONTAL AND VERTICAL
 class C4Node:
 
     def __init__(self, game_state):
         self.game_state = game_state
         self.rows = [game_state[i] for i in range(len(game_state))]
         self.columns = [[rows[i] for rows in game_state] for i in range(7)]
-
-        self.diagonals = None #DEFINE DIAGOANLS
 
         self.upcoming_player = self.upcoming_player()
         self.winner = self.check_win_states()
@@ -66,14 +60,19 @@ class C4Node:
             return 'Tie'
 
     def remaining_columns(self):
-        #only need to check if the top element is zero
-        open_columns = [i for i in range(7) if self.game_state[-1][i] == 0]
-        return open_columns
+        open_columns = [i for i in range(7)]
+        for i in range(7):
+            nonzero_column_values = [self.game_state[j][i] for j in range(6) if self.game_state[j][i] != 0]
+            if len(nonzero_column_values) == 6:
+                open_columns.remove(i)
 
         return open_columns
     
     def copy_of_copies(self): 
-        new_copy = [row.copy() for row in self.game_state]
+        new_copy = []
+        for rows in self.game_state: 
+            new_copy.append(rows.copy())
+        
         return new_copy
     
     def classify_horizontals(self): 
@@ -180,8 +179,9 @@ class Queue:
     def dequeue(self):
         self.items.pop(0)
 
+
 class C4HeuristicTree:
-    def __init__(self,root, initial_ply):
+    def __init__(self, root, initial_ply):
 
         self.root = C4Node(root)
         self.nodes = {}
@@ -192,12 +192,10 @@ class C4HeuristicTree:
         self.generate_initial_tree()
 
     def generate(self, nodes, ply): 
-        
+
         queue = Queue()
-        visited_nodes = set()
         for node in nodes: 
             queue.enqueue(node)
-            visited_nodes.add(self.get_board_tuple(node.game_state))
 
         while len(queue.items) != 0:
 
@@ -214,9 +212,9 @@ class C4HeuristicTree:
                     new_move_board = current_node.copy_of_copies()
                     new_move_row_index = self.row_index_of_move(column, new_move_board)
                     new_move_board[new_move_row_index][column] = current_node.upcoming_player
-                    new_move_tuple_board = self.get_board_tuple(new_move_board)
-
-                    if new_move_tuple_board in visited_nodes:
+                    new_move_tuple_board = tuple([tuple(new_move_board[i]) for i in range(6)])
+                    
+                    if new_move_tuple_board in self.nodes:
                         new_node = self.nodes[new_move_tuple_board]
                         current_node.children.append(new_node)
                         new_node.parents.append(current_node)
@@ -229,7 +227,6 @@ class C4HeuristicTree:
                     current_node.children.append(new_node)
                     queue.enqueue(new_node)
                     self.nodes[new_move_tuple_board] = new_node
-                    visited_nodes.add(new_move_tuple_board)
                     
             queue.dequeue() 
         self.num_nodes = len(self.nodes)
@@ -242,9 +239,6 @@ class C4HeuristicTree:
             row = 5-i
             if board[row][move] == 0:
                 return row
-    
-    def get_board_tuple(self, game_state):
-        return tuple(tuple(row) for row in game_state)
     
     def one_layer_tuple(self, depth): 
         tuple_layer = []
@@ -268,6 +262,9 @@ class C4HeuristicTree:
 
         self.generate(previous_layer_nodes, new_layer_depth)
     
+    def get_board_tuple(self, game_state):
+        return tuple(tuple(row) for row in game_state)
+        
     def assign_heuristic_values(self, node): 
         if node.children == []: 
             if node.winner == 1:
@@ -298,47 +295,26 @@ class C4HeuristicTree:
         return 
 
 
-#node = C4Node([[0,0,0,0,0,0,0],
+#test = [[0,0,0,0,0,0,0], 
+#        [0,0,0,0,0,0,0], 
+#        [0,0,0,0,0,0,0], 
 #        [0,0,0,0,0,0,0],
 #        [0,0,0,0,0,0,0],
-#        [0,0,0,0,0,0,2],
-#        [0,0,0,0,0,0,2],
-#        [0,0,0,0,0,1,1]])
+#        [0,0,0,0,0,0,0]]
 
-#start = time.time()
+#tree = C4HeuristicTree(test,4)
 
-#tree = C4HeuristicTree(2)
-
+#tree.assign_heuristic_values(tree.root)
+#tree.add_layer(2)
+#tree.prune_layer(1)
 #tree.add_layer(3)
 #tree.prune_layer(2)
-#tree.add_layer(4)
-#tree.prune_layer(3)
-#tree.add_layer(5)
-#tree.prune_layer(4)
-#tree.add_layer(6)
-#tree.assign_heuristic_values(tree.root)
 
-
-
+#tree.add_layer(2)
 #for nodes in tree.nodes:
-#    if tree.nodes[nodes].game_state == [[0,0,0,0,0,0,0], [0,0,0,0,0,0,0], [0,0,0,2,0,0,0],[0,0,0,1,0,0,0],[0,0,0,2,0,0,0],[1,0,0,1,0,2,0]]: 
-#        print('HAHHAHAHA')
-#        tree.nodes[nodes].print()
-#        print
-#        break
-    #tree.nodes[nodes].print()
-    #print((tree.nodes[nodes].heuristic_value))
-    #print()
+#    tree.nodes[nodes].print()
+#    print('herusitic value', tree.nodes[nodes].heuristic_value)
+#    print()
 
-#end = time.time()
-#print('total time', end-start)
-#print('num nodes', tree.num_nodes-1)
-#print('hi',tree.num_nodes)
+#print('num nodes', tree.num_nodes)
 
-
-check = [[0,0,0,0,0,0,0], 
-         [0,0,0,0,0,0,0], 
-         [0,0,0,2,0,0,0],
-         [0,0,0,1,0,0,0],
-         [0,0,0,2,0,0,0],
-         [1,0,0,1,0,2,0]]

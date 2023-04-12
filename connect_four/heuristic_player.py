@@ -28,9 +28,10 @@ class HeuristicPlayer:
         
         current_board = board_node.game_state
 
-        best_move_index = 0
-        for i in range(9): 
-            if current_board[i] != best_move_board[i]: 
-                best_move_index = i 
-                return best_move_index
+        best_move_index = 4
+        for i in range(6): 
+            for j in range(7): 
+                if current_board[i][j] != best_move_board[i][j]: 
+                    best_move_index = j
+                    return best_move_index
 

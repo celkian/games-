@@ -94,7 +94,20 @@ class C4Node:
                         self.horizontal_three_of_a_kinds.append(3)
                     else: 
                         self.horizontal_three_of_a_kinds.append(-3)
-
+                
+                #2202
+                elif horizontal[0 + i] == horizontal[1 + i] == horizontal[3 + i] != 0 and  horizontal[2 + i] == 0: 
+                    if horizontal[0 + i] == self.upcoming_player: 
+                        self.horizontal_three_of_a_kinds.append(3)
+                    else: 
+                        self.horizontal_three_of_a_kinds.append(-3)
+                
+                #2022
+                elif horizontal[0 + i] == horizontal[2 + i] == horizontal[3 + i] != 0 and  horizontal[1 + i] == 0: 
+                    if horizontal[0 + i] == self.upcoming_player: 
+                        self.horizontal_three_of_a_kinds.append(3)
+                    else: 
+                        self.horizontal_three_of_a_kinds.append(-3)
                 #0022
                 elif horizontal[0 + i] == horizontal[1 + i] == 0 and horizontal[2+i] == horizontal[3 + i] != 0: 
                     if horizontal[2 + i] == self.upcoming_player: 

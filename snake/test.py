@@ -7,6 +7,9 @@ from christine_player import ChristinePlayer
 total_score = 0
 total_moves = 0
 
+snake = Snake(ChristinePlayer())
+snake.run(True)
+
 num_games = 100
 for i in range(num_games): 
     p1 = ChristinePlayer()

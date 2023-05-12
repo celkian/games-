@@ -17,14 +17,14 @@ jeff = minimaxHeuristic(1,4)
 last_minute_player = LastMinutePlayer()
 
 
-#game = ConnectFour(heuristic_5,last_minute_player)
-#game.run(log=True)
+game = ConnectFour(heuristic_5, manual)
+game.run(log=True)
 
 
 
 
 outcomes = {'Tie': 0, 'last_minute': 0, 'heuristic_5': 0}
-amount = 10
+amount = 0
 
 for i in range(amount):
     if i % 2 == 0:

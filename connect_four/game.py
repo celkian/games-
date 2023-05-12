@@ -8,8 +8,18 @@ class ConnectFour:
         self.winner = None
 
     def print(self):
-        for i in range(6):
-            print(self.board[i])
+        for i in range(len(self.board[0])):
+            print(str(i+1) + " ", end="")
+        print("")
+        for row in self.board:
+            for piece in row:
+                if piece == 0:
+                    print("🟦", end="")
+                elif piece == 1:
+                    print("🔴", end="")
+                elif piece == 2:
+                    print("🟡", end="")
+            print("")
 
     def copy_board(self):
         copy_board =[]
@@ -70,6 +80,7 @@ class ConnectFour:
             copy_board = self.copy_board()
             current_player = self.players[self.current_player_num]
             upcoming_column_move = current_player.choose_move(copy_board)
+
             move_row_index = self.row_index_of_move(upcoming_column_move)
 
             if self.move_validity(upcoming_column_move) == True: 
